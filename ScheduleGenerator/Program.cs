@@ -89,7 +89,7 @@ var scheduleList = new List<StreamSchedule>();
 DateOnly currentDate = firstDate;
 while (true)
 {
-    var willStream = Prompt.Confirm($"Will you be streaming on {currentDate.ToShortDateString()}?");
+    var willStream = Prompt.Confirm($"Will you be streaming on {currentDate.ToLongDateString()}?");
     if (!willStream)
     {
         scheduleList.Add(new StreamSchedule(null, currentDate, null));
