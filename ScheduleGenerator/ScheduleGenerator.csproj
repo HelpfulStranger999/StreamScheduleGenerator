@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbededResource Include="font\DancingScript-VariableFont_wght.ttf" />
+    <EmbeddedResource Include="font\DancingScript-VariableFont_wght.ttf" />
   </ItemGroup>
 
 </Project>

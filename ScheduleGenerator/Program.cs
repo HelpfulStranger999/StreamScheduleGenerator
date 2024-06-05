@@ -1,4 +1,5 @@
 ﻿
+using System.Reflection;
 using System.Text;
 using Sharprompt;
 using SixLabors.Fonts;
@@ -10,7 +11,12 @@ using SixLabors.ImageSharp.Processing;
 FontFamily GetFontFamily()
 {
     var collection = new FontCollection();
-    return collection.Add("DancingScript-VariableFont_wght.ttf");
+
+    var assembly = Assembly.GetExecutingAssembly();
+    var name = assembly.GetName().Name;
+
+    using var stream = assembly.GetManifestResourceStream($"{name}.font.DancingScript-VariableFont_wght.ttf");
+    return collection.Add(stream!);
 }
 
 Image<Rgba32> GenerateScheduleImage(StreamSchedule[] streamSchedule, FontFamily fontFamily)
