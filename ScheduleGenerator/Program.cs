@@ -129,10 +129,8 @@ while (true)
 }
 
 
-
-var fileLocation = Prompt.Input<string>("Schedule generated. Would you like the schedule saved?");
-
 await image.SaveAsPngAsync(fileLocation);
 var image = GenerateScheduleImage(schedule, GetFontFamily());
 
+var fileLocation = Prompt.Input<string>("Schedule generated. Where would you like the schedule saved?");
 
