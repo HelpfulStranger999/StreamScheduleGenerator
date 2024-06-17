@@ -61,7 +61,7 @@ Image<Rgba32> GenerateScheduleImage(Schedule schedule, FontFamily fontFamily)
 
         context.DrawLine(pen, new PointF(160, 140), new PointF(160, image.Height));
 
-        for (int i = 0; i < schedule.Count; i++)
+        for (int i = 0; i < streams.Count; i++)
         {
             int xPos = 140 + i * 110;
             var schedule = streams[i];

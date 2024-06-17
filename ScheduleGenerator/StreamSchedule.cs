@@ -6,7 +6,9 @@ namespace ScheduleGenerator;
 public class Schedule
 {
     public bool IsEmpty => Streams.Count <= 0;
-    public int Count => (EndDate?.DayNumber - StartDate?.DayNumber) ?? 0;
+
+    // Adding one includes the end date into the count
+    public int Count => (EndDate?.DayNumber - StartDate?.DayNumber + 1) ?? 0;
 
     [MemberNotNullWhen(false, nameof(IsEmpty))]
     public DateOnly? StartDate { get; private set; } = null;
