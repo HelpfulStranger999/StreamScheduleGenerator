@@ -15,7 +15,7 @@ public class GenerateScheduleMenu(Schedule schedule) : IMenu
         var image = imageGenerator.GenerateScheduleImage(Schedule);
         Console.WriteLine("Schedule successfully generated.");
 
-        var defaultFileLocation = $"Schedule_{Schedule.StartDate?.ToString("MM-dd-yy")}_{Schedule.EndDate?.ToString("MM-dd-yy")}";
+        var defaultFileLocation = $"Schedule_{Schedule.StartDate?.ToString("MM-dd-yy")}_{Schedule.EndDate?.ToString("MM-dd-yy")}.png";
         string fileLocation;
 
         do
@@ -23,7 +23,12 @@ public class GenerateScheduleMenu(Schedule schedule) : IMenu
             fileLocation = Prompt.Input<string>("Where would you like the schedule saved?", defaultValue: defaultFileLocation);
         } while (File.Exists($"{fileLocation}.png") && !Prompt.Confirm("A file already exists at this location. Do you wish to override?"));
 
-        image.SaveAsPng($"{fileLocation}.png");
+        if (!fileLocation.EndsWith(".png"))
+        {
+            fileLocation += ".png";
+        }
+
+        image.SaveAsPng(fileLocation);
         Environment.Exit(0);
     }
 }
