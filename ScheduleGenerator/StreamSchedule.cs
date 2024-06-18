@@ -77,6 +77,15 @@ public class ScheduledStream(DateOnly date)
 
     public DateOnly Date { get; } = date;
 
+    public override string ToString()
     {
+        if (DoesStream)
+        {
+            return $"streaming \"{Title}\" on {Date} at {Time}";
+        }
+        else
+        {
+            return $"not streaming on {Date}";
+        }
     }
 }
