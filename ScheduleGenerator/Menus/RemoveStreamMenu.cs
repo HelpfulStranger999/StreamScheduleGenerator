@@ -15,6 +15,11 @@ public class RemoveStreamMenu(Schedule schedule, ScheduledStream stream) : IMenu
         {
             Stream.Time = null;
             Stream.Title = null;
+
+            if (Stream.Date == Schedule.EndDate || Stream.Date == Schedule.StartDate)
+            {
+                Schedule.Remove(Stream);
+            }
         }
     }
 }

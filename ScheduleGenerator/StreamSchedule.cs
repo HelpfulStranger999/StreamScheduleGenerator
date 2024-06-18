@@ -38,6 +38,53 @@ public class Schedule
         }
     }
 
+    public void Remove(ScheduledStream stream)
+    {
+        if (stream.Date != StartDate && stream.Date != EndDate)
+        {
+            Streams.Remove(stream.Date);
+        }
+        else
+        {
+            stream.Time = null;
+            stream.Title = null;
+            return;
+        }
+
+        if (Streams.Count == 1)
+        {
+            StartDate = null;
+            EndDate = null;
+            return;
+        }
+
+        if (stream.Date == StartDate)
+        {
+            var date = StartDate.Value.AddDays(1);
+            ScheduledStream? newStream;
+
+            while (!Streams.TryGetValue(date, out newStream))
+            {
+                date = date.AddDays(1);
+            }
+
+            StartDate = newStream.Date;
+        }
+
+        if (stream.Date == EndDate)
+        {
+            var date = EndDate.Value.AddDays(-1);
+            ScheduledStream? newStream;
+
+            while (!Streams.TryGetValue(date, out newStream))
+            {
+                date = date.AddDays(-1);
+            }
+
+            EndDate = newStream.Date;
+        }
+    }
+
     public ImmutableList<ScheduledStream> ToList()
     {
         if (StartDate is null)
