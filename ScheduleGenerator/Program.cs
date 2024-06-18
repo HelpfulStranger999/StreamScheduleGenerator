@@ -151,7 +151,14 @@ while (true)
 }
 
 var image = GenerateScheduleImage(schedule, GetFontFamily());
+Console.WriteLine("Schedule successfully generated.");
 
-var fileLocation = Prompt.Input<string>("Schedule generated. Where would you like the schedule saved?");
+var defaultFileLocation = $"Schedule_{schedule.StartDate?.ToString("MM-dd-yy")}_{schedule.EndDate?.ToString("MM-dd-yy")}";
+string fileLocation;
+
+do
+{
+    fileLocation = Prompt.Input<string>("Where would you like the schedule saved?", defaultValue: defaultFileLocation);
+} while (File.Exists($"{fileLocation}.png") && !Prompt.Confirm("A file already exists at this location. Do you wish to override?"));
 
 await image.SaveAsPngAsync($"{fileLocation}.png");
