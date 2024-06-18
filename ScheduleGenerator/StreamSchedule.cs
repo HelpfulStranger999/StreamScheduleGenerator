@@ -65,7 +65,7 @@ public class Schedule
     }
 }
 
-public class ScheduledStream
+public class ScheduledStream(DateOnly date)
 {
     public bool DoesStream => Time != null;
 
@@ -75,10 +75,8 @@ public class ScheduledStream
     [MemberNotNullWhen(true, nameof(DoesStream))]
     public TimeOnly? Time { get; set; }
 
-    public DateOnly Date { get; }
+    public DateOnly Date { get; } = date;
 
-    public ScheduledStream(DateOnly date)
     {
-        Date = date;
     }
 }
