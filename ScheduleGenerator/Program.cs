@@ -89,7 +89,7 @@ Image<Rgba32> GenerateScheduleImage(Schedule schedule, FontFamily fontFamily)
 
 ScheduledStream CreateScheduleDay(DateOnly currentDate)
 {
-    var willStream = Prompt.Confirm($"Will you be streaming on {currentDate.ToLongDateString()}?");
+    var willStream = Prompt.Confirm($"Will you be streaming on {currentDate.ToLongDateString()}?", defaultValue: true);
     if (!willStream)
     {
         return new ScheduledStream(currentDate);
@@ -111,14 +111,14 @@ ScheduledStream CreateScheduleDay(DateOnly currentDate)
     }
 }
 
-var firstDate = Prompt.Input<DateOnly>("What is the first date of the stream schedule?");
+var firstDate = Prompt.Input<DateOnly>("What is the first date of the stream schedule?", defaultValue: DateOnly.FromDateTime(DateTime.Now).AddDays(1), placeholder: "Tomorrow");
 var schedule = new Schedule();
 
 DateOnly currentDate = firstDate;
 while (true)
 {
     schedule.Add(CreateScheduleDay(currentDate));
-    if (Prompt.Confirm("Add another day to the schedule?"))
+    if (Prompt.Confirm("Add another day to the schedule?", defaultValue: true))
     {
         currentDate = currentDate.AddDays(1);
     }
