@@ -111,6 +111,54 @@ ScheduledStream CreateScheduleDay(DateOnly currentDate)
     }
 }
 
+void EditSchedule(Schedule schedule)
+{
+    var streams = schedule.ToList();
+    var streamSchedule = Prompt.Select("Which stream do you wish to edit?", streams, textSelector: schedule => schedule.ToString());
+    EditScheduledStream(streamSchedule);
+}
+
+void EditScheduledStream(ScheduledStream stream)
+{
+    var submenus = new Dictionary<string, Action>()
+    {
+        {
+            "Edit Time",
+            () =>
+            {
+                stream.Time = Prompt.Input<TimeOnly>("When will you stream?", placeholder: stream.Time?.ToString());
+
+                if (string.IsNullOrWhiteSpace(stream.Title))
+                {
+                    stream.Title = Prompt.Input<string>("Since this is a new stream, what will you stream?", placeholder: stream.Title);
+                }
+            }
+        },
+        {
+            "Edit Title",
+            () =>
+            {
+                stream.Title = Prompt.Input<string>("What will you stream?", placeholder: stream.Title);
+                stream.Time ??= Prompt.Input<TimeOnly>("Since this is a new stream, when will you stream?");
+            }
+        },
+        {
+            "Remove",
+            () =>
+            {
+                if (Prompt.Confirm("Are you sure you wish to remove this stream?"))
+                {
+                    stream.Time = null;
+                    stream.Title = null;
+                }
+            }
+        }
+    };
+
+    var submenu = Prompt.Select("What do you want to edit?", submenus, textSelector: submenu => submenu.Key);
+    submenu.Value();
+}
+
 var firstDate = Prompt.Input<DateOnly>("What is the first date of the stream schedule?", defaultValue: DateOnly.FromDateTime(DateTime.Now).AddDays(1), placeholder: "Tomorrow");
 var schedule = new Schedule();
 
@@ -128,6 +176,24 @@ while (true)
     }
 }
 
+while (true)
+{
+    Console.WriteLine();
+    Console.WriteLine("Here is your stream schedule:");
+
+    foreach (var stream in schedule.ToList())
+    {
+        Console.Write("\t");
+        Console.WriteLine(stream.ToString());
+    }
+
+    if (!Prompt.Confirm("Do you wish to edit the schedule before generating it?"))
+    {
+        break;
+    }
+
+    EditSchedule(schedule);
+}
 
 var image = GenerateScheduleImage(schedule, GetFontFamily());
 
