@@ -21,7 +21,7 @@ public class ReviewScheduleMenu(Schedule schedule) : IMenu
         {
             new AddScheduledStreamMenu(schedule),
             new EditScheduleMenu(schedule),
-            new GenerateScheduleMenu()
+            new GenerateScheduleMenu(schedule)
         };
 
         var menu = Prompt.Select("What do you want to do?", submenus, defaultValue: submenus[^1], textSelector: submenu => submenu.MenuTitle);
