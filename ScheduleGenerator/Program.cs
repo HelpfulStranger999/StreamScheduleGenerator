@@ -88,67 +88,18 @@ Image<Rgba32> GenerateScheduleImage(Schedule schedule, FontFamily fontFamily)
     return image;
 }
 
-ScheduledStream CreateScheduleDay(DateOnly currentDate)
-{
-    var willStream = Prompt.Confirm($"Will you be streaming on {currentDate.ToLongDateString()}?", defaultValue: true);
-    if (!willStream)
-    {
-        return new ScheduledStream(currentDate);
-    }
-    else
-    {
-        var title = Prompt.Input<string>("What will you stream?");
-        while (title.Length > 15 && Prompt.Confirm("Warning: This title may run out of bounds. Do you wish to edit?"))
-        {
-            title = Prompt.Input<string>("What will you stream?");
-        }
-
-        var time = Prompt.Input<TimeOnly>("When will you stream?");
-        return new ScheduledStream(currentDate)
-        {
-            Title = title,
-            Time = time
-        };
-    }
-}
-
-
-var firstDate = Prompt.Input<DateOnly>("What is the first date of the stream schedule?", defaultValue: DateOnly.FromDateTime(DateTime.Now).AddDays(1), placeholder: "Tomorrow");
 var schedule = new Schedule();
+IMenu menu = new StartScheduleMenu(schedule);
+menu.Execute();
 
-DateOnly currentDate = firstDate;
-while (true)
+while (Prompt.Confirm("Add another day to the schedule?", defaultValue: true))
 {
-    schedule.Add(CreateScheduleDay(currentDate));
-    if (Prompt.Confirm("Add another day to the schedule?", defaultValue: true))
-    {
-        currentDate = currentDate.AddDays(1);
-    }
-    else
-    {
-        break;
-    }
+    menu = new AppendScheduledStreamMenu(schedule);
+    menu.Execute();
 }
 
-while (true)
-{
-    Console.WriteLine();
-    Console.WriteLine("Here is your stream schedule:");
-
-    foreach (var stream in schedule.ToList())
-    {
-        Console.Write("\t");
-        Console.WriteLine(stream.ToString());
-    }
-
-    if (!Prompt.Confirm("Do you wish to edit the schedule before generating it?"))
-    {
-        break;
-    }
-
-    var editMenu = new EditScheduleMenu(schedule);
-    editMenu.Execute();
-}
+menu = new ReviewScheduleMenu(schedule);
+menu.Execute();
 
 var image = GenerateScheduleImage(schedule, GetFontFamily());
 Console.WriteLine("Schedule successfully generated.");
