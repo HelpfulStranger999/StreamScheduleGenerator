@@ -4,7 +4,7 @@ using Sharprompt;
 
 public class ReviewScheduleMenu(Schedule schedule) : IMenu
 {
-    public string MenuTitle => "Review Schedule"
+    public string MenuTitle => "Review Schedule";
 
     public void Execute()
     {
@@ -24,7 +24,7 @@ public class ReviewScheduleMenu(Schedule schedule) : IMenu
             new GenerateScheduleMenu()
         };
 
-        var menu = Prompt.Select("What do you want to do?", submenus, defaultValue: submenus[-1], textSelector: submenu => submenu.MenuTitle);
+        var menu = Prompt.Select("What do you want to do?", submenus, defaultValue: submenus[^1], textSelector: submenu => submenu.MenuTitle);
         menu.Execute();
     }
 }
